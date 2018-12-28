@@ -6,12 +6,15 @@ import matplotlib.pyplot as plt
 i = cv2.imread('road1.jpg')
 img_copy = np.copy(i)
 gray_scale = cv2.cvtColor(img_copy, cv2.COLOR_RGB2GRAY)
+cv2.imwrite('gray_scale.jpg', gray_scale)
 
 # Noise Reduction using Gaussian Blur and then Canny
 def canny(img):
 	gray_scale = cv2.cvtColor(img_copy, cv2.COLOR_RGB2GRAY)
 	gaussian_blur = cv2.GaussianBlur(gray_scale, (5, 5), 0)
+	cv2.imwrite("gaussian_blur.jpg", gaussian_blur)
 	canny = cv2.Canny(gaussian_blur, 50, 150)
+	cv2.imwrite("Canny.jpg", canny)
 	return canny
 
 # Region of Interest
@@ -61,10 +64,12 @@ def average_slope_intercept(image, lines):
 
 canny_img = canny(img_copy)
 roi_img = roi(canny_img)
+cv2.imwrite("Roi.jpg", roi_img)
 lanes = cv2.HoughLinesP(roi_img, 2, np.pi / 180, 100, np.array([]), minLineLength = 40, maxLineGap = 5)
 # averaged_lines = average_slope_intercept(img_copy, lanes)
 line_img = display_image(img_copy, lanes)
 combined = cv2.addWeighted(img_copy, 0.8, line_img, 1, 1)
+cv2.imwrite("final_output.jpg", combined)
 cv2.imshow('Image', combined)
 cv2.waitKey(0)
 # plt.imshow(roi_img)
